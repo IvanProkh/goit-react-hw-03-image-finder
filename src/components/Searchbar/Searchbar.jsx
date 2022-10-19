@@ -3,6 +3,7 @@ import {
   SearchbarWrapper,
   SearchForm,
   SearchFormButton,
+  SearchFormInput,
 } from './Searchbar.styled';
 
 const Searchbar = () => {
@@ -13,8 +14,7 @@ const Searchbar = () => {
           <span>Search</span>
         </SearchFormButton>
 
-        <input
-          className="Input"
+        <SearchFormInput
           type="text"
           autoComplete="off"
           autoFocus
