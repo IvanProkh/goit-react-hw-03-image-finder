@@ -18,10 +18,10 @@ body {
   /* background-color: rgb(226, 217, 217); */
   line-height: 1.5;
 
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  flex-direction: column; */
 }
 
 body:nth-last-of-type() code {
