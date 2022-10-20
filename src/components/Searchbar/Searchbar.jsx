@@ -6,7 +6,7 @@ import {
   SearchFormInput,
 } from './Searchbar.styled';
 
-const Searchbar = () => {
+export const Searchbar = () => {
   return (
     <SearchbarWrapper>
       <SearchForm>
@@ -24,5 +24,3 @@ const Searchbar = () => {
     </SearchbarWrapper>
   );
 };
-
-export default Searchbar;

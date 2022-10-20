@@ -1,7 +1,7 @@
 import React from 'react';
 import { Gallery } from './ImageGallery.styled';
 
-const ImageGallery = () => {
+export const ImageGallery = () => {
   return (
     <Gallery>
       {/* {items.map(({ }) => (
@@ -13,5 +13,3 @@ const ImageGallery = () => {
     </Gallery>
   );
 };
-
-export default ImageGallery;
