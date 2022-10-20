@@ -1,15 +1,16 @@
 import React from 'react';
+import { Gallery } from './ImageGallery.styled';
 
 const ImageGallery = () => {
   return (
-    <ul className="Gallery">
+    <Gallery>
       {/* {items.map(({ }) => (
         <li key={id}>
           <span>{name} :</span>
           <span>{number}</span>
         </li>
       ))} */}
-    </ul>
+    </Gallery>
   );
 };
 

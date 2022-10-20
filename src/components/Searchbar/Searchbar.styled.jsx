@@ -34,14 +34,15 @@ export const SearchFormButton = styled.button`
   width: 48px;
   height: 48px;
   border: 0;
-  background-image: url('../../../public/751463.png');
-  background-size: 40%;
+  background-image: url('https://raw.githubusercontent.com/IvanProkh/goit-js-hw-11/main/src/img/icon.png');
+  background-size: 50%;
   background-repeat: no-repeat;
   background-position: center;
   opacity: 0.6;
   transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   outline: none;
+  color: black;
 
   :hover {
     opacity: 1;
