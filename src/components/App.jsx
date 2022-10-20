@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { AppBox } from './App.styled';
 
 import { Searchbar } from './Searchbar/Searchbar';
@@ -18,13 +19,16 @@ export class App extends Component {
   };
 
   render() {
+    const { showModal } = this.state;
     return (
       <AppBox>
-        {this.state.showModal && <Modal onClick={this.toggleModal} />}
+        {showModal && <Modal onClick={this.toggleModal} />}
         <Searchbar />
+
         <button type="button" onClick={this.toggleModal}>
           Открыть
         </button>
+
         <Loader />
 
         <ImageGallery>
