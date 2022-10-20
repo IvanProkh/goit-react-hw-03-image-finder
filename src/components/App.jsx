@@ -1,26 +1,47 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { AppBox } from './App.styled';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
+// import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 import { Modal } from './Modal/Modal';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 
-export const App = () => {
-  return (
-    <AppBox>
-      <Searchbar />
-      <Loader />
+export class App extends Component {
+  state = { showModal: false };
 
-      <ImageGallery>
-        <ImageGalleryItem>
-          <Modal />
-        </ImageGalleryItem>
-      </ImageGallery>
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
 
-      <Button />
-    </AppBox>
-  );
-};
+  render() {
+    return (
+      <AppBox>
+        {this.state.showModal && <Modal onClick={this.toggleModal} />}
+        <Searchbar />
+        <button type="button" onClick={this.toggleModal}>
+          Открыть
+        </button>
+        <Loader />
+
+        <ImageGallery>
+          {/* <ImageGalleryItem>
+        </ImageGalleryItem> */}
+        </ImageGallery>
+
+        <Button />
+      </AppBox>
+    );
+  }
+}
+
+// export default App;
+
+// export const App = () => {
+//   return (
+
+//   );
+// };
