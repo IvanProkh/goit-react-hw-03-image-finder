@@ -1,4 +1,5 @@
 import React from 'react';
+import { AppBox } from './App.styled';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -9,15 +10,17 @@ import { Loader } from './Loader/Loader';
 
 export const App = () => {
   return (
-    <div className="App">
+    <AppBox>
       <Searchbar />
       <Loader />
+
       <ImageGallery>
         <ImageGalleryItem>
           <Modal />
         </ImageGalleryItem>
       </ImageGallery>
+
       <Button />
-    </div>
+    </AppBox>
   );
 };
