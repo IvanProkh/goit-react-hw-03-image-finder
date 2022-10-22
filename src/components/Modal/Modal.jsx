@@ -14,18 +14,21 @@ export class Modal extends Component {
   componentWillUnmount() {
     console.log('componentWillUnmount');
     window.addEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
   handleKeyDown = e => {
     console.log(e.code);
     if (e.code === 'Escape') {
       console.log('Escape!!!!');
-      this.props.onClick();
+      this.props.onClose();
     }
   };
 
   handleBackdropClick = event => {
-    console.log(event);
+    if (event.currentTarget === event.target) {
+      this.props.onClose();
+    }
   };
 
   render() {
@@ -35,7 +38,7 @@ export class Modal extends Component {
           <img src="" alt="" />
           <h1>MODAL</h1>
           <p>Lorem ipsum dolor sit amet consectetur.</p>
-          <button type="button" onClick={this.props.onClick}>
+          <button type="button" onClick={this.props.onClose}>
             Закрыть
           </button>
           {/* {this.props.children} */}

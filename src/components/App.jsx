@@ -4,7 +4,7 @@ import { AppBox } from './App.styled';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-// import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
+import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 import { Modal } from './Modal/Modal';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
@@ -22,7 +22,7 @@ export class App extends Component {
     const { showModal } = this.state;
     return (
       <AppBox>
-        {showModal && <Modal onClick={this.toggleModal} />}
+        {showModal && <Modal onClose={this.toggleModal} />}
         <Searchbar />
 
         <button type="button" onClick={this.toggleModal}>
@@ -32,8 +32,7 @@ export class App extends Component {
         <Loader />
 
         <ImageGallery>
-          {/* <ImageGalleryItem>
-        </ImageGalleryItem> */}
+          <ImageGalleryItem />
         </ImageGallery>
 
         <Button />
@@ -41,11 +40,3 @@ export class App extends Component {
     );
   }
 }
-
-// export default App;
-
-// export const App = () => {
-//   return (
-
-//   );
-// };
