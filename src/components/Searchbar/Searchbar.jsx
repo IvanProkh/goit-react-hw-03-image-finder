@@ -11,7 +11,7 @@ export const Searchbar = ({ onChange, onClick }) => {
     <SearchbarWrapper>
       <SearchForm>
         <SearchFormButton
-          type="button"
+          type="submit"
           // onClick={onClick(serchImage)}
           onClick={onClick}
         >

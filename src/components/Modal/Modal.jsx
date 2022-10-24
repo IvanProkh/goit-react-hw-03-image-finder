@@ -35,13 +35,7 @@ export class Modal extends Component {
     return createPortal(
       <Overlay onClick={this.handleBackdropClick}>
         <OpenModal>
-          <img src="" alt="" />
-          <h1>MODAL</h1>
-          <p>Lorem ipsum dolor sit amet consectetur.</p>
-          <button type="button" onClick={this.props.onClose}>
-            Закрыть
-          </button>
-          {/* {this.props.children} */}
+          <img src={this.props.img} alt="" />
         </OpenModal>
       </Overlay>,
       modalRoot

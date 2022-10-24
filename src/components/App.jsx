@@ -16,6 +16,7 @@ export class App extends Component {
     query: '',
     currentPage: 1,
     images: [],
+    modalImage: '',
   };
 
   // HTTP запрос
@@ -61,58 +62,42 @@ export class App extends Component {
 
   handleSubmitInput = async e => {
     e.preventDefault();
+    this.setState({ loading: true });
 
     const response = await searchImage(
       this.state.query,
       this.state.currentPage
     );
-    this.setState({ images: response.hits });
+    this.setState({ images: response.hits, loading: false });
     console.log('пришло от кнопки', this.state.images);
   };
 
-  toggleModal = () => {
+  toggleModal = img => {
+    this.setState({ modalImage: img });
+
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
+
+    console.log('картинка в модалку', img);
   };
 
   render() {
-    const { showModal, loading } = this.state;
+    const { showModal, loading, images } = this.state;
+    const { toggleModal, handleSubmitInput, handleChangeInput } = this;
     return (
       <AppBox>
-        {showModal && <Modal onClose={this.toggleModal} />}
-        <Searchbar
-          onClick={this.handleSubmitInput}
-          onChange={this.handleChangeInput}
-        />
-
-        <button type="button" onClick={this.toggleModal}>
-          Открыть
-        </button>
+        {showModal && (
+          <Modal onClose={toggleModal} img={this.state.modalImage} />
+        )}
+        <Searchbar onClick={handleSubmitInput} onChange={handleChangeInput} />
 
         {loading && <Loader />}
 
-        <ImageGallery items={this.state.images}>
-          {/* <ImageGalleryItem /> */}
-        </ImageGallery>
+        <ImageGallery items={images} openModal={this.toggleModal} />
 
         <Button />
       </AppBox>
     );
   }
 }
-
-// const response = await axios
-//   .get(`${BASE_URL}`, {
-//     params: {
-//       key: `${API_KEY}`,
-//       q: `${this.state.nameSearch}`,
-//       image_type: 'photo',
-//       orientation: 'horizontal',
-//       safesearch: 'true',
-//       page: `${this.state.currentPage}`,
-//       per_page: `${this.state.perPage}`,
-//     },
-//   })
-//   .then(images => this.setState({ images }))
-//   .finally(() => this.setState({ loading: false }));
