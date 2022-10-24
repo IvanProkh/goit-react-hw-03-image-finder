@@ -14,9 +14,11 @@ export const Overlay = styled.div`
 `;
 
 export const OpenModal = styled.div`
-  /* width: 300px;
-  height: 300px;
-  background-color: white; */
-  max-width: calc(100vw - 48px);
-  max-height: calc(100vh - 24px);
+  /* width: 800px;
+  height: 600px; */
+  object-fit: cover;
+
+  img {
+    object-fit: cover;
+  }
 `;
