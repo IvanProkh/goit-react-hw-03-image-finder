@@ -4,21 +4,17 @@ import { AppBox } from './App.styled';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 import { Modal } from './Modal/Modal';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { searchImage } from '../api/searchApi';
 
-console.log(searchImage());
-
 export class App extends Component {
   state = {
     showModal: false,
     loading: false,
-    query: 'cat',
+    query: '',
     currentPage: 1,
-    perPage: 12,
     images: [],
   };
 
@@ -26,15 +22,12 @@ export class App extends Component {
 
   async componentDidMount() {
     this.setState({ loading: true });
-    // const response =
-    // 'https://pixabay.com/api/?q=cat&page=1&key=your_key&image_type=photo&orientation=horizontal&per_page=12';
-    const response = await searchImage(this.query, this.currentPage);
-    this.setState({ images: response.hits, loading: false }, () =>
-      console.log('in setState', this.state.images)
-    );
 
-    console.log('did response', response);
-    console.log(this.state.images);
+    const response = await searchImage(
+      this.state.query,
+      this.state.currentPage
+    );
+    this.setState({ images: response.hits, loading: false });
   }
 
   // if (totalHits > 0 && currentPage === 1) {
@@ -62,6 +55,21 @@ export class App extends Component {
 
   // Конец запроса
 
+  handleChangeInput = e => {
+    this.setState({ query: e.currentTarget.value });
+  };
+
+  handleSubmitInput = async e => {
+    e.preventDefault();
+
+    const response = await searchImage(
+      this.state.query,
+      this.state.currentPage
+    );
+    this.setState({ images: response.hits });
+    console.log('пришло от кнопки', this.state.images);
+  };
+
   toggleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
@@ -73,7 +81,10 @@ export class App extends Component {
     return (
       <AppBox>
         {showModal && <Modal onClose={this.toggleModal} />}
-        <Searchbar />
+        <Searchbar
+          onClick={this.handleSubmitInput}
+          onChange={this.handleChangeInput}
+        />
 
         <button type="button" onClick={this.toggleModal}>
           Открыть
@@ -81,8 +92,8 @@ export class App extends Component {
 
         {loading && <Loader />}
 
-        <ImageGallery>
-          <ImageGalleryItem />
+        <ImageGallery items={this.state.images}>
+          {/* <ImageGalleryItem /> */}
         </ImageGallery>
 
         <Button />
