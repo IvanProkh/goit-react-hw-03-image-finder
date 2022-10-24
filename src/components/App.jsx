@@ -25,10 +25,11 @@ export class App extends Component {
   // HTTP запрос
 
   async componentDidMount() {
+    this.setState({ loading: true });
     // const response =
     // 'https://pixabay.com/api/?q=cat&page=1&key=your_key&image_type=photo&orientation=horizontal&per_page=12';
     const response = await searchImage(this.query, this.currentPage);
-    this.setState({ images: response.hits, isLoader: false }, () =>
+    this.setState({ images: response.hits, loading: false }, () =>
       console.log('in setState', this.state.images)
     );
 
