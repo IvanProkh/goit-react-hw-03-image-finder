@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Notiflix from 'notiflix';
 
 import { AppBox } from './App.styled';
 
@@ -13,23 +14,24 @@ export class App extends Component {
   state = {
     showModal: false,
     loading: false,
+    showButton: false,
     query: '',
     currentPage: 1,
     images: [],
-    modalImage: '',
+    largeImageData: {},
   };
 
   // HTTP запрос
 
-  async componentDidMount() {
-    this.setState({ loading: true });
+  // async componentDidMount() {
+  //   this.setState({ loading: true });
 
-    const response = await searchImage(
-      this.state.query,
-      this.state.currentPage
-    );
-    this.setState({ images: response.hits, loading: false });
-  }
+  //   const response = await searchImage(
+  //     this.state.query,
+  //     this.state.currentPage
+  //   );
+  //   this.setState({ images: response.hits, loading: false });
+  // }
 
   // if (totalHits > 0 && currentPage === 1) {
   //   Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
@@ -62,41 +64,64 @@ export class App extends Component {
 
   handleSubmitInput = async e => {
     e.preventDefault();
-    this.setState({ loading: true });
+    this.setState({ images: [], showButton: false });
 
-    const response = await searchImage(
-      this.state.query,
-      this.state.currentPage
-    );
-    this.setState({ images: response.hits, loading: false });
-    console.log('пришло от кнопки', this.state.images);
+    const { query, currentPage } = this.state;
+
+    if (query.trim().length === 0) {
+      Notiflix.Notify.failure(
+        'It looks like you want to find nothing, please check your query.'
+      );
+      return;
+    }
+
+    this.setState({ loading: true });
+    const response = await searchImage(query, currentPage);
+
+    if (response.totalHits === 0) {
+      this.setState({ loading: false });
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      return;
+    }
+
+    this.setState({ images: response.hits, loading: false, showButton: true });
   };
 
-  toggleModal = img => {
-    this.setState({ modalImage: img });
+  toggleModal = (source, alt) => {
+    this.setState({ modalImage: source });
+
+    this.setState(
+      {
+        largeImageData: {
+          source,
+          alt,
+        },
+      },
+      () => console.log('data', this.state.largeImageData)
+    );
 
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
-
-    console.log('картинка в модалку', img);
   };
 
   render() {
-    const { showModal, loading, images } = this.state;
+    const { showModal, loading, showButton, images, largeImageData } =
+      this.state;
     const { toggleModal, handleSubmitInput, handleChangeInput } = this;
+
     return (
       <AppBox>
-        {showModal && (
-          <Modal onClose={toggleModal} img={this.state.modalImage} />
-        )}
+        {showModal && <Modal onClose={toggleModal} data={largeImageData} />}
         <Searchbar onClick={handleSubmitInput} onChange={handleChangeInput} />
 
         {loading && <Loader />}
 
         <ImageGallery items={images} openModal={this.toggleModal} />
 
-        <Button />
+        {showButton && <Button />}
       </AppBox>
     );
   }
