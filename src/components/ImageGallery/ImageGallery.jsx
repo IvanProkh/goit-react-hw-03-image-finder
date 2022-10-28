@@ -15,7 +15,7 @@ export const ImageGallery = ({ items, openModal }) => {
   // console.log('items в галерее', items);
   return (
     <Gallery>
-      {items.map(({ id, webformatURL, tags, largeImageURL }) => (
+      {items.map(({ id, webformatURL, tags }) => (
         <ImageGalleryItem
           key={id}
           id={id}

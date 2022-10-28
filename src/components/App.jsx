@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Notiflix from 'notiflix';
+// import Notiflix from 'notiflix';
 
 import { AppBox } from './App.styled';
 
@@ -9,6 +9,8 @@ import { Modal } from './Modal/Modal';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { searchImage } from '../api/searchApi';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export class App extends Component {
   state = {
@@ -58,35 +60,32 @@ export class App extends Component {
 
   // Конец запроса
 
-  handleChangeInput = e => {
-    this.setState({ query: e.currentTarget.value });
-  };
+  handleFormSubmit = async search => {
+    console.log('in APP', search);
+    await this.setState({ query: search });
 
-  handleSubmitInput = async e => {
-    e.preventDefault();
     this.setState({ images: [], showButton: false });
 
     const { query, currentPage } = this.state;
 
-    if (query.trim().length === 0) {
-      Notiflix.Notify.failure(
-        'It looks like you want to find nothing, please check your query.'
-      );
-      return;
-    }
-
     this.setState({ loading: true });
+
     const response = await searchImage(query, currentPage);
 
     if (response.totalHits === 0) {
       this.setState({ loading: false });
-      Notiflix.Notify.failure(
+      toast.error(
         'Sorry, there are no images matching your search query. Please try again.'
       );
       return;
     }
 
-    this.setState({ images: response.hits, loading: false, showButton: true });
+    this.setState({
+      images: response.hits,
+      loading: false,
+      showButton: true,
+      currentPage: currentPage + 1,
+    });
   };
 
   toggleModal = (source, alt) => {
@@ -107,21 +106,45 @@ export class App extends Component {
     }));
   };
 
+  loadMoreImages = async () => {
+    const { query, currentPage } = this.state;
+
+    const response = await searchImage(query, currentPage);
+    await this.setState({
+      images: response.hits,
+      loading: false,
+      currentPage: currentPage + 1,
+    });
+  };
+
   render() {
     const { showModal, loading, showButton, images, largeImageData } =
       this.state;
-    const { toggleModal, handleSubmitInput, handleChangeInput } = this;
+    const { toggleModal, handleFormSubmit, handleChangeInput } = this;
 
     return (
       <AppBox>
         {showModal && <Modal onClose={toggleModal} data={largeImageData} />}
-        <Searchbar onClick={handleSubmitInput} onChange={handleChangeInput} />
+        {/* <Searchbar onClick={handleSubmitInput} onChange={handleChangeInput} /> */}
+        <Searchbar onSubmit={handleFormSubmit} />
 
         {loading && <Loader />}
 
         <ImageGallery items={images} openModal={this.toggleModal} />
 
-        {showButton && <Button />}
+        {showButton && <Button onClick={this.loadMoreImages} />}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
       </AppBox>
     );
   }
