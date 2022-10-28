@@ -8,17 +8,12 @@ import {
 } from './Searchbar.styled';
 
 export class Searchbar extends Component {
-  searchInput = document.querySelector('input');
-
   state = { search: '' };
 
   handleInputChange = e => {
-    this.setState(
-      {
-        search: e.currentTarget.value.toLowerCase(),
-      },
-      () => console.log('search', this.state.search)
-    );
+    this.setState({
+      search: e.currentTarget.value.toLowerCase(),
+    });
   };
 
   handleSubmit = e => {
@@ -33,9 +28,7 @@ export class Searchbar extends Component {
 
     this.props.onSubmit(this.state.search);
 
-    this.setState({ search: '' }, () =>
-      console.log('search 2', this.state.search)
-    );
+    this.setState({ search: '' });
   };
 
   render() {

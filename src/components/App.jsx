@@ -61,7 +61,6 @@ export class App extends Component {
   // Конец запроса
 
   handleFormSubmit = async search => {
-    console.log('in APP', search);
     await this.setState({ query: search });
 
     this.setState({ images: [], showButton: false });
@@ -120,7 +119,7 @@ export class App extends Component {
   render() {
     const { showModal, loading, showButton, images, largeImageData } =
       this.state;
-    const { toggleModal, handleFormSubmit, handleChangeInput } = this;
+    const { toggleModal, handleFormSubmit } = this;
 
     return (
       <AppBox>
