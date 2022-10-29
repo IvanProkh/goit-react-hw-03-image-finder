@@ -14,8 +14,12 @@ export const Overlay = styled.div`
 `;
 
 export const OpenModal = styled.div`
+  display: flex;
+  justify-content: center; /*центрируем элемент по горизонтали */
+  align-items: center; /* и вертикали */
   /* width: 800px;
   height: 600px; */
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 24px);
+  overflow: hidden;
 `;

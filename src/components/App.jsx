@@ -53,11 +53,9 @@ export class App extends Component {
   handleFormSubmit = async search => {
     await this.setState({ query: search });
 
-    this.setState({ images: [], showButton: false });
+    this.setState({ images: [], showButton: false, loading: true });
 
     const { query, currentPage } = this.state;
-
-    this.setState({ loading: true });
 
     await searchImage(query, currentPage)
       .then(response => {
@@ -109,7 +107,7 @@ export class App extends Component {
     await searchImage(query, currentPage)
       .then(response => {
         if (response.hits.length < 12) {
-          toast.error(
+          toast.info(
             "We're sorry, but you've reached the end of search results."
           );
           this.setState({ showButton: false });
@@ -134,19 +132,20 @@ export class App extends Component {
   render() {
     const { showModal, loading, showButton, images, largeImageData } =
       this.state;
-    const { toggleModal, handleFormSubmit } = this;
+    const { toggleModal, handleFormSubmit, loadMoreImages } = this;
 
     return (
       <AppBox>
         {showModal && <Modal onClose={toggleModal} data={largeImageData} />}
-        {/* <Searchbar onClick={handleSubmitInput} onChange={handleChangeInput} /> */}
+
         <Searchbar onSubmit={handleFormSubmit} />
+
+        <ImageGallery items={images} openModal={toggleModal} />
 
         {loading && <Loader />}
 
-        <ImageGallery items={images} openModal={this.toggleModal} />
+        {showButton && <Button onClick={loadMoreImages} />}
 
-        {showButton && <Button onClick={this.loadMoreImages} />}
         <ToastContainer
           position="top-right"
           autoClose={3000}
