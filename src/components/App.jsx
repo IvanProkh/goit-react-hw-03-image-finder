@@ -25,16 +25,6 @@ export class App extends Component {
 
   // HTTP запрос
 
-  // async componentDidMount() {
-  //   this.setState({ loading: true });
-
-  //   const response = await searchImage(
-  //     this.state.query,
-  //     this.state.currentPage
-  //   );
-  //   this.setState({ images: response.hits, loading: false });
-  // }
-
   // if (totalHits > 0 && currentPage === 1) {
   //   Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
   //   refs.loadMoreButton.classList.toggle('is-hidden');
@@ -77,11 +67,14 @@ export class App extends Component {
           );
           return;
         }
-        return this.setState({
-          images: response.hits,
-          showButton: true,
-          currentPage: currentPage + 1,
-        });
+        return this.setState(
+          {
+            images: response.hits,
+            showButton: true,
+            currentPage: currentPage + 1,
+          },
+          () => console.log('response', response)
+        );
       })
       .finally(() =>
         this.setState({
@@ -114,13 +107,23 @@ export class App extends Component {
     this.setState({ loading: true });
 
     await searchImage(query, currentPage)
-      .then(response =>
-        this.setState({
-          images: response.hits,
-          loading: false,
-          currentPage: currentPage + 1,
-        })
-      )
+      .then(response => {
+        if (response.hits.length < 12) {
+          toast.error(
+            "We're sorry, but you've reached the end of search results."
+          );
+          this.setState({ showButton: false });
+        }
+
+        return this.setState(
+          {
+            images: response.hits,
+            loading: false,
+            currentPage: currentPage + 1,
+          },
+          () => console.log('response', response.hits)
+        );
+      })
       .finally(() =>
         this.setState({
           loading: false,
