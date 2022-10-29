@@ -35,12 +35,7 @@ export class Searchbar extends Component {
     return (
       <SearchbarWrapper>
         <SearchForm>
-          <SearchFormButton
-            type="submit"
-            // onClick={onClick(serchImage)}
-            // onClick={this.props.onClick}
-            onClick={this.handleSubmit}
-          >
+          <SearchFormButton type="submit" onClick={this.handleSubmit}>
             <span>Search</span>
           </SearchFormButton>
 
@@ -50,7 +45,6 @@ export class Searchbar extends Component {
             autoFocus
             placeholder="Search images and photos"
             value={this.state.search}
-            // onChange={this.props.onChange}
             onChange={this.handleInputChange}
           />
         </SearchForm>

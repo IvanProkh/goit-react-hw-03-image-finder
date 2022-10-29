@@ -23,6 +23,15 @@ export class App extends Component {
     largeImageData: {},
   };
 
+  componentDidUpdate(_, prevState) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.currentPage !== this.state.currentPage
+    ) {
+      console.log('fetch');
+    }
+  }
+
   // HTTP запрос
 
   // if (totalHits > 0 && currentPage === 1) {
@@ -53,7 +62,12 @@ export class App extends Component {
   handleFormSubmit = async search => {
     await this.setState({ query: search });
 
-    this.setState({ images: [], showButton: false, loading: true });
+    await this.setState({
+      images: [],
+      showButton: false,
+      loading: true,
+      currentPage: 1,
+    });
 
     const { query, currentPage } = this.state;
 
@@ -69,7 +83,7 @@ export class App extends Component {
           {
             images: response.hits,
             showButton: true,
-            currentPage: currentPage + 1,
+            // currentPage: currentPage + 1,
           },
           () => console.log('response', response)
         );
@@ -99,40 +113,47 @@ export class App extends Component {
     }));
   };
 
-  loadMoreImages = async () => {
-    const { query, currentPage } = this.state;
-
-    this.setState({ loading: true });
-
-    await searchImage(query, currentPage)
-      .then(response => {
-        if (response.hits.length < 12) {
-          toast.info(
-            "We're sorry, but you've reached the end of search results."
-          );
-          this.setState({ showButton: false });
-        }
-
-        return this.setState(
-          {
-            images: response.hits,
-            loading: false,
-            currentPage: currentPage + 1,
-          },
-          () => console.log('response', response.hits)
-        );
-      })
-      .finally(() =>
-        this.setState({
-          loading: false,
-        })
-      );
+  loadMore = () => {
+    this.setState(prevState => ({
+      currentPage: prevState.currentPage + 1,
+    }));
+    console.log();
   };
+
+  // loadMore = async () => {
+  //   const { query, currentPage } = this.state;
+
+  //   this.setState({ loading: true });
+
+  //   await searchImage(query, currentPage)
+  //     .then(response => {
+  //       if (response.hits.length < 12) {
+  //         toast.info(
+  //           "We're sorry, but you've reached the end of search results."
+  //         );
+  //         this.setState({ showButton: false });
+  //       }
+
+  //       return this.setState(
+  //         {
+  //           images: response.hits,
+  //           loading: false,
+  //           currentPage: currentPage + 1,
+  //         },
+  //         () => console.log('response', response.hits)
+  //       );
+  //     })
+  //     .finally(() =>
+  //       this.setState({
+  //         loading: false,
+  //       })
+  //     );
+  // };
 
   render() {
     const { showModal, loading, showButton, images, largeImageData } =
       this.state;
-    const { toggleModal, handleFormSubmit, loadMoreImages } = this;
+    const { toggleModal, handleFormSubmit, loadMore: loadMoreImages } = this;
 
     return (
       <AppBox>
