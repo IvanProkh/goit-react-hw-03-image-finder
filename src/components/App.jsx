@@ -69,22 +69,25 @@ export class App extends Component {
 
     this.setState({ loading: true });
 
-    const response = await searchImage(query, currentPage);
-
-    if (response.totalHits === 0) {
-      this.setState({ loading: false });
-      toast.error(
-        'Sorry, there are no images matching your search query. Please try again.'
+    await searchImage(query, currentPage)
+      .then(response => {
+        if (response.totalHits === 0) {
+          toast.error(
+            'Sorry, there are no images matching your search query. Please try again.'
+          );
+          return;
+        }
+        return this.setState({
+          images: response.hits,
+          showButton: true,
+          currentPage: currentPage + 1,
+        });
+      })
+      .finally(() =>
+        this.setState({
+          loading: false,
+        })
       );
-      return;
-    }
-
-    this.setState({
-      images: response.hits,
-      loading: false,
-      showButton: true,
-      currentPage: currentPage + 1,
-    });
   };
 
   toggleModal = (source, alt) => {
@@ -108,12 +111,21 @@ export class App extends Component {
   loadMoreImages = async () => {
     const { query, currentPage } = this.state;
 
-    const response = await searchImage(query, currentPage);
-    await this.setState({
-      images: response.hits,
-      loading: false,
-      currentPage: currentPage + 1,
-    });
+    this.setState({ loading: true });
+
+    await searchImage(query, currentPage)
+      .then(response =>
+        this.setState({
+          images: response.hits,
+          loading: false,
+          currentPage: currentPage + 1,
+        })
+      )
+      .finally(() =>
+        this.setState({
+          loading: false,
+        })
+      );
   };
 
   render() {
