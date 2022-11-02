@@ -79,14 +79,11 @@ export class App extends Component {
           );
           return;
         }
-        return this.setState(
-          {
-            images: response.hits,
-            showButton: true,
-            currentPage: currentPage + 1,
-          },
-          () => console.log('response', response)
-        );
+        return this.setState({
+          images: response.hits,
+          showButton: true,
+          currentPage: currentPage + 1,
+        });
       })
       .finally(() =>
         this.setState({
@@ -98,15 +95,12 @@ export class App extends Component {
   toggleModal = (source, alt) => {
     this.setState({ modalImage: source });
 
-    this.setState(
-      {
-        largeImageData: {
-          source,
-          alt,
-        },
+    this.setState({
+      largeImageData: {
+        source,
+        alt,
       },
-      () => console.log('data', this.state.largeImageData)
-    );
+    });
 
     this.setState(({ showModal }) => ({
       showModal: !showModal,
@@ -134,15 +128,12 @@ export class App extends Component {
           this.setState({ showButton: false });
         }
 
-        return this.setState(
-          prevState => ({
-            images: [...prevState.images, ...response.hits],
-            // images: response.hits,
-            loading: false,
-            currentPage: currentPage + 1,
-          }),
-          () => console.log('response', response.hits)
-        );
+        return this.setState(prevState => ({
+          images: [...prevState.images, ...response.hits],
+          // images: response.hits,
+          loading: false,
+          currentPage: currentPage + 1,
+        }));
       })
       .finally(() =>
         this.setState({
@@ -154,7 +145,7 @@ export class App extends Component {
   render() {
     const { showModal, loading, showButton, images, largeImageData } =
       this.state;
-    const { toggleModal, handleFormSubmit, loadMore: loadMoreImages } = this;
+    const { toggleModal, handleFormSubmit, loadMore } = this;
 
     return (
       <AppBox>
@@ -166,7 +157,7 @@ export class App extends Component {
 
         {loading && <Loader />}
 
-        {showButton && <Button onClick={loadMoreImages} />}
+        {showButton && <Button onClick={loadMore} />}
 
         <ToastContainer
           position="top-right"

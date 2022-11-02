@@ -1,5 +1,7 @@
 import { React, Component } from 'react';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+
 import {
   SearchbarWrapper,
   SearchForm,
@@ -9,6 +11,10 @@ import {
 
 export class Searchbar extends Component {
   state = { search: '' };
+
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+  };
 
   handleInputChange = e => {
     this.setState({
@@ -52,3 +58,7 @@ export class Searchbar extends Component {
     );
   }
 }
+
+// Searchbar.prototype = {
+//   onSubmit: PropTypes.func.isRequired,
+// };

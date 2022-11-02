@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { createPortal } from 'react-dom';
+import PropTypes from 'prop-types';
 
 import { Overlay, OpenModal } from './Modal.styled';
 
@@ -41,3 +42,8 @@ export class Modal extends Component {
     );
   }
 }
+
+Modal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
+};
