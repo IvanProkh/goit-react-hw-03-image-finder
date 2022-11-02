@@ -28,26 +28,29 @@ export class App extends Component {
     if (prevState.query !== query || prevState.currentPage !== currentPage) {
       console.log('fetch');
 
+      try {
+
        async searchImage(query, currentPage)
-      .then(response => {
-        if (response.totalHits === 0) {
-          toast.error(
-            'Sorry, there are no images matching your search query. Please try again.'
+          .then(response => {
+            if (response.totalHits === 0) {
+              toast.error(
+                'Sorry, there are no images matching your search query. Please try again.'
+              );
+              return;
+            }
+            return this.setState({
+              images: response.hits,
+              showButton: true,
+              currentPage: currentPage + 1,
+            });
+          })
+          .finally(() =>
+            this.setState({
+              loading: false,
+            })
           );
-          return;
-        }
-        return this.setState({
-          images: response.hits,
-          showButton: true,
-          currentPage: currentPage + 1,
-        });
-      })
-      .finally(() =>
-        this.setState({
-          loading: false,
-        })
-      );
-    }
+      }
+  }
   }
 
   handleFormSubmit = search => {
