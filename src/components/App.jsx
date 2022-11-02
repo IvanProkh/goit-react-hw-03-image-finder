@@ -23,55 +23,12 @@ export class App extends Component {
     largeImageData: {},
   };
 
-  // componentDidUpdate(_, prevState) {
-  //   if (
-  //     prevState.query !== this.state.query ||
-  //     prevState.currentPage !== this.state.currentPage
-  //   ) {
-  //     console.log('fetch');
-  //   }
-  // }
-
-  // HTTP запрос
-
-  // if (totalHits > 0 && currentPage === 1) {
-  //   Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-  //   refs.loadMoreButton.classList.toggle('is-hidden');
-  // }
-
-  // if (totalHits === 0) {
-  //   Notiflix.Notify.failure(
-  //     'Sorry, there are no images matching your search query. Please try again.'
-  //   );
-  // }
-
-  // if (totalHits !== numOfElements) {
-  //   currentPage += 1;
-  //   return response;
-  // }
-
-  // if (totalHits === numOfElements && totalHits > 0) {
-  //   Notiflix.Notify.failure(
-  //     "We're sorry, but you've reached the end of search results."
-  //   );
-  //   refs.loadMoreButton.classList.toggle('is-hidden');
-  // }
-
-  // Конец запроса
-
-  handleFormSubmit = async search => {
-    await this.setState({ query: search });
-
-    await this.setState({
-      images: [],
-      showButton: false,
-      loading: true,
-      currentPage: 1,
-    });
-
+  componentDidUpdate(_, prevState) {
     const { query, currentPage } = this.state;
+    if (prevState.query !== query || prevState.currentPage !== currentPage) {
+      console.log('fetch');
 
-    await searchImage(query, currentPage)
+       async searchImage(query, currentPage)
       .then(response => {
         if (response.totalHits === 0) {
           toast.error(
@@ -90,7 +47,55 @@ export class App extends Component {
           loading: false,
         })
       );
+    }
+  }
+
+  handleFormSubmit = search => {
+    this.setState({ query: search });
+
+    this.setState({
+      images: [],
+      showButton: false,
+      loading: true,
+      currentPage: 1,
+    });
   };
+
+  // fetch = async (query ) => {
+  //   const { query, currentPage } = this.state;
+
+  // handleFormSubmit = async search => {
+  //   await this.setState({ query: search });
+
+  //   await this.setState({
+  //     images: [],
+  //     showButton: false,
+  //     loading: true,
+  //     currentPage: 1,
+  //   });
+
+  // const { query, currentPage } = this.state;
+
+  // await searchImage(query, currentPage)
+  //   .then(response => {
+  //     if (response.totalHits === 0) {
+  //       toast.error(
+  //         'Sorry, there are no images matching your search query. Please try again.'
+  //       );
+  //       return;
+  //     }
+  //     return this.setState({
+  //       images: response.hits,
+  //       showButton: true,
+  //       currentPage: currentPage + 1,
+  //     });
+  //   })
+  //   .finally(() =>
+  //     this.setState({
+  //       loading: false,
+  //     })
+  //   );
+  // };
 
   toggleModal = (source, alt) => {
     this.setState({ modalImage: source });
@@ -107,40 +112,40 @@ export class App extends Component {
     }));
   };
 
-  // loadMore = () => {
-  //   this.setState(prevState => ({
-  //     currentPage: prevState.currentPage + 1,
-  //   }));
-  //   console.log();
-  // };
-
-  loadMore = async () => {
-    const { query, currentPage } = this.state;
-
-    this.setState({ loading: true });
-
-    await searchImage(query, currentPage)
-      .then(response => {
-        if (response.hits.length < 12) {
-          toast.info(
-            "We're sorry, but you've reached the end of search results."
-          );
-          this.setState({ showButton: false });
-        }
-
-        return this.setState(prevState => ({
-          images: [...prevState.images, ...response.hits],
-          // images: response.hits,
-          loading: false,
-          currentPage: currentPage + 1,
-        }));
-      })
-      .finally(() =>
-        this.setState({
-          loading: false,
-        })
-      );
+  loadMore = () => {
+    this.setState(prevState => ({
+      currentPage: prevState.currentPage + 1,
+    }));
+    console.log();
   };
+
+  // loadMore = async () => {
+  //   const { query, currentPage } = this.state;
+
+  //   this.setState({ loading: true });
+
+  //   await searchImage(query, currentPage)
+  //     .then(response => {
+  //       if (response.hits.length < 12) {
+  //         toast.info(
+  //           "We're sorry, but you've reached the end of search results."
+  //         );
+  //         this.setState({ showButton: false });
+  //       }
+
+  //       return this.setState(prevState => ({
+  //         images: [...prevState.images, ...response.hits],
+  //         // images: response.hits,
+  //         // loading: false,
+  //         currentPage: currentPage + 1,
+  //       }));
+  //     })
+  //     .finally(() =>
+  //       this.setState({
+  //         loading: false,
+  //       })
+  //     );
+  // };
 
   render() {
     const { showModal, loading, showButton, images, largeImageData } =
