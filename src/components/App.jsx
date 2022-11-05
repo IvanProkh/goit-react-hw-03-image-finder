@@ -58,55 +58,20 @@ export class App extends Component {
   }
 
   handleFormSubmit = search => {
-    this.setState({ query: search });
+    if (this.state.query === search.trim()) {
+      return toast.info(
+        'It looks like there are already pictures found for your request, please check if this will be a new search.'
+      );
+    }
 
     this.setState({
       images: [],
-      // showButton: false,
-      // loading: true,
+      query: search,
       currentPage: 1,
     });
   };
 
-  // fetch = async (query ) => {
-  //   const { query, currentPage } = this.state;
-
-  // handleFormSubmit = async search => {
-  //   await this.setState({ query: search });
-
-  //   await this.setState({
-  //     images: [],
-  //     showButton: false,
-  //     loading: true,
-  //     currentPage: 1,
-  //   });
-
-  // const { query, currentPage } = this.state;
-
-  // await searchImage(query, currentPage)
-  //   .then(response => {
-  //     if (response.totalHits === 0) {
-  //       toast.error(
-  //         'Sorry, there are no images matching your search query. Please try again.'
-  //       );
-  //       return;
-  //     }
-  //     return this.setState({
-  //       images: response.hits,
-  //       showButton: true,
-  //       currentPage: currentPage + 1,
-  //     });
-  //   })
-  //   .finally(() =>
-  //     this.setState({
-  //       loading: false,
-  //     })
-  //   );
-  // };
-
   toggleModal = (source, alt) => {
-    this.setState({ modalImage: source });
-
     this.setState({
       largeImageData: {
         source,
@@ -123,7 +88,6 @@ export class App extends Component {
     this.setState(prevState => ({
       currentPage: prevState.currentPage + 1,
     }));
-    console.log();
   };
 
   render() {
@@ -143,18 +107,7 @@ export class App extends Component {
 
         {showButton && <Button onClick={loadMore} />}
 
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
+        <ToastContainer autoClose={3000} theme="colored" />
       </AppBox>
     );
   }

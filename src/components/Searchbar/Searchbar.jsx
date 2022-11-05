@@ -58,7 +58,3 @@ export class Searchbar extends Component {
     );
   }
 }
-
-// Searchbar.prototype = {
-//   onSubmit: PropTypes.func.isRequired,
-// };
