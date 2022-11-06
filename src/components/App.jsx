@@ -20,6 +20,7 @@ export class App extends Component {
     currentPage: 1,
     images: [],
     largeImageData: {},
+    error: null,
   };
 
   async componentDidUpdate(_, prevState) {
@@ -28,8 +29,8 @@ export class App extends Component {
     if (prevState.query !== query || prevState.currentPage !== currentPage) {
       this.setState({ loading: true, showButton: true });
 
-      await searchImage(query, currentPage)
-        .then(response => {
+      try {
+        await searchImage(query, currentPage).then(response => {
           if (response.totalHits === 0) {
             toast.error(
               'Sorry, there are no images matching your search query. Please try again.'
@@ -48,12 +49,19 @@ export class App extends Component {
             images: [...prevState.images, ...response.hits],
             // showButton: true,
           }));
-        })
-        .finally(() =>
-          this.setState({
-            loading: false,
-          })
-        );
+        });
+        // .finally(() =>
+        //   this.setState({
+        //     loading: false,
+        //   })
+        // );
+      } catch (error) {
+        this.setState({ error });
+      } finally {
+        this.setState({
+          loading: false,
+        });
+      }
     }
   }
 
@@ -88,7 +96,7 @@ export class App extends Component {
   };
 
   render() {
-    const { showModal, loading, showButton, images, largeImageData } =
+    const { showModal, loading, showButton, images, largeImageData, error } =
       this.state;
     const { toggleModal, handleFormSubmit, loadMore } = this;
 
@@ -97,6 +105,8 @@ export class App extends Component {
         {showModal && <Modal onClose={toggleModal} data={largeImageData} />}
 
         <Searchbar onSubmit={handleFormSubmit} />
+
+        {error && <p>Whoops, something went wrong: {error.message}</p>}
 
         <ImageGallery items={images} openModal={toggleModal} />
 
