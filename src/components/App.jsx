@@ -72,14 +72,11 @@ export class App extends Component {
   };
 
   toggleModal = (source, alt) => {
-    this.setState({
+    this.setState(({ showModal }) => ({
       largeImageData: {
         source,
         alt,
       },
-    });
-
-    this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
   };
